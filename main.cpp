@@ -6,9 +6,12 @@
 
 using namespace std;
 
-// the "man in the middle" for requests being sent to and from the server
-// current just here so that I dont forget to add this later
-// does nothing
+
+/*
+    the "man in the middle" for requests being sent to and from the server
+    current just here so that I dont forget to add this later
+    does nothing
+*/
 struct PerilAppMiddleman {
 
     std::string logMsg;
@@ -28,9 +31,13 @@ struct PerilAppMiddleman {
 
 /* 
     standard route response should be:
+
     {
-        "debugMsg":std::string
+        "debugMsg":std::string,
+        "username":std::string,
     }
+
+    standard response code should be 200 - if not, then return crow::response(int)
 */
 int main() {
 
