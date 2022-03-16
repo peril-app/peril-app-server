@@ -39,7 +39,7 @@ libboost1.67-tools-dev \
 libboost-mpi-python1.67.0 \
 -y
 
-apt install libboost-all-dev cmake -y
+apt install cmake -y
 
 cmake .
 
