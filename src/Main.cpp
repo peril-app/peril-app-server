@@ -4,7 +4,7 @@
 #include "oatpp/web/server/api/ApiController.hpp"
 #include "oatpp/core/macro/codegen.hpp"
 
-#include OATAPP_CODEGEN_BEGIN(ApiController)
+#include OATPP_CODEGEN_BEGIN(ApiController)
 
 class MainAPIController : public oatpp::web::server::api::ApiController {
 
@@ -21,4 +21,4 @@ class MainAPIController : public oatpp::web::server::api::ApiController {
     }
 }
 
-#include OATAPP_CODEGEN_END(ApiController)
+#include OATPP_CODEGEN_END(ApiController)
