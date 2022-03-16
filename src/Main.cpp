@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "oatpp/src/oatpp/web/server/api/ApiController.hpp"
-#include "oatpp/src/oatpp/core/macro/codegen.hpp"
+#include "oatpp/web/server/api/ApiController.hpp"
+#include "oatpp/core/macro/codegen.hpp"
 
 #include OATAPP_CODEGEN_BEGIN(ApiController)
 

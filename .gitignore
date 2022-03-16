@@ -1,8 +1,8 @@
 !.gitignore
 .vscode/
 src/oatapp/build/
-src/CMakeCache.txt
-src/CMakeFiles/
+src/oatapp/CMakeCache.txt
+src/oatapp/CMakeFiles/
 src/cmake_install.cmake
 src/Makefile
 src/libperil_app_server_libs.a
