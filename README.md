@@ -19,3 +19,7 @@ Yep! As long as you host it yourself. If you want to use a pre-hosted version, t
 ## How do I run the server?
 
 ***Instructions pending as the application is not complete. Please check back later!***
+
+## Included libraries
+
+- Crow: https://github.com/ipkn/crow
