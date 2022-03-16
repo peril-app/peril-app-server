@@ -23,3 +23,7 @@ Yep! As long as you host it yourself. If you want to use a pre-hosted version, t
 ## Included libraries
 
 - Crow: https://github.com/CrowCpp/crow
+
+## Tested operating systems
+
+- Ubuntu Server 20.04
