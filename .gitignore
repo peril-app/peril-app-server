@@ -5,3 +5,4 @@ Makefile
 cmake_install.cmake
 lib/Makefile
 lib/cmake_install.cmake
+*crow-v*.deb
