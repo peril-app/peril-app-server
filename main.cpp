@@ -1,5 +1,4 @@
-#include "lib/crow.h"
-
+#include <crow_all.h>
 #include <iostream>
 #include <string>
 
