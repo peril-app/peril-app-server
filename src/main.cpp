@@ -23,7 +23,8 @@ struct PerilAppMiddleman {
     struct context {};
 
     // before handling the request - usually stuff like logging
-    void before_handle(crow::request& req, crow::response& res, context& ctx) {cout << "[peril-app-server] " << logMsg << endl;}
+    // [peril-app-server] [PID] [PPID] message
+    void before_handle(crow::request& req, crow::response& res, context& ctx) {cout << "[peril-app-server] [" << getpid() << "] [" << getppid() << "] " << logMsg << endl;}
 
     // for now, do nothing
     void after_handle(crow::request& req, crow::response& res, context& ctx) {;}
