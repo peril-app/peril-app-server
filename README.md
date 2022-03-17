@@ -12,13 +12,13 @@ Yep! As long as you host it yourself. If you want to use a pre-hosted version, t
 
 ## How do I build the server?
 
-1.] `git clone https://github.com/peril-app/peril-app-server && cd peril-app-server/src`
+1.] `git clone https://github.com/peril-app/peril-app-server && cd peril-app-server`
 
 2.] `sudo ./setup.sh` (sit back, as this may take a little while since you are building everything from source!)
 
 ## How do I run the server (pre-release version)?
 
-1.] After building the server, run `./peril-app-server` in the `src` directory. Do not use `sudo` to run the server, as it is not required.
+1.] After building the server, cd to `src` and run `./peril-app-server` in the `src` directory. Do not use `sudo` to run the server, as it is not required.
 
 ## Included libraries
 
