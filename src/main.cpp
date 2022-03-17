@@ -6,7 +6,6 @@
 
 using namespace std;
 
-
 /*
     the "man in the middle" for requests being sent to and from the server
     current just here so that I dont forget to add this later
@@ -29,14 +28,23 @@ struct PerilAppMiddleman {
     void after_handle(crow::request& req, crow::response& res, context& ctx) {;}
 };
 
+/*
+    takes no arguments, is based off of the session itself.
+    this will check the stored session information against the database to check if the user is still logged in.
+    for any private route, this is REQUIRED before any sort of database access happens!
+*/
+bool checkSessionValidity() {
+
+    // todo
+    return false;
+}
+
 /* 
     standard route response should be:
-
     {
         "debugMsg":std::string,
-        "username":std::string,
+        "statusCode:int,
     }
-
     standard response code should be 200 - if not, then return crow::response(int)
 */
 int main() {
@@ -57,27 +65,27 @@ int main() {
         switch (authActionID) {
 
             case 0 : // wants to create an account
-                return crow::response(503);
+                return std::string("{debugMsg:\"\",statusCode:503}");
                 break;
             
             case 1 : // wants to delete an account
-                return crow::response(503);
+                return std::string("{debugMsg:\"\",statusCode:503}");
                 break;
             
             case 2 : // wants to sign in
-                return crow::response(503);
+                return std::string("{debugMsg:\"\",statusCode:503}");
                 break;
             
             case 3 : // wants to sign out
-                return crow::response(503);
+                return std::string("{debugMsg:\"\",statusCode:503}");
                 break;
             
             case 4 : // wants to check if signed in (only for error handling)
-                return crow::response(503);
+                return std::string("{debugMsg:\"\",auth:" + std::string(checkSessionValidity() ? "true" : "false") + ",statusCode:200}");
                 break;
 
             default: // wrong action ID
-                return crow::response(404);
+                return std::string("{debugMsg:\"route does not exist\",statusCode:404}");
         }
     });
 
