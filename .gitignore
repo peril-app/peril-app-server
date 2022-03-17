@@ -8,3 +8,7 @@ src/cmake_install.cmake
 src/peril-app-server
 peril-app-server
 *.db
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+Makefile
