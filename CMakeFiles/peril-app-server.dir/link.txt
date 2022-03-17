@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/peril-app-server.dir/main.cpp.o  -o peril-app-server  -lpthread 

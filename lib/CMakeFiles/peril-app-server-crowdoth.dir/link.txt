@@ -1,0 +1,2 @@
+/usr/bin/ar qc libperil-app-server-crowdoth.a  
+/usr/bin/ranlib libperil-app-server-crowdoth.a

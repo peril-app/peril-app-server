@@ -10,6 +10,6 @@ wget https://github.com/CrowCpp/Crow/releases/download/v0.3%2B4/crow-v0.3+4.deb
 
 apt install ./crow-v0.3+4.deb -y
 
-cmake .
+cmake ./src
 
-cmake --build .
+cmake --build ./src

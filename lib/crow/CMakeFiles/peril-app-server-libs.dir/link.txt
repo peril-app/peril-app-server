@@ -1,0 +1,2 @@
+/usr/bin/ar qc libperil-app-server-libs.a  
+/usr/bin/ranlib libperil-app-server-libs.a
