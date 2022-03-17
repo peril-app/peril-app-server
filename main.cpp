@@ -51,6 +51,36 @@ int main() {
         return "{debugMsg:\"homepage test\"}";
     });
 
+    CROW_ROUTE(app, "/auth/<int>").methods("POST"_method)
+    ([] (int authActionID) {
+
+        switch (authActionID) {
+
+            case 0 : // wants to create an account
+                return crow::response(503);
+                break;
+            
+            case 1 : // wants to delete an account
+                return crow::response(503);
+                break;
+            
+            case 2 : // wants to sign in
+                return crow::response(503);
+                break;
+            
+            case 3 : // wants to sign out
+                return crow::response(503);
+                break;
+            
+            case 4 : // wants to check if signed in (only for error handling)
+                return crow::response(503);
+                break;
+
+            default: // wrong action ID
+                return crow::response(404);
+        }
+    });
+
     app.loglevel(crow::LogLevel::Debug);
 
     app.port(7348).multithreaded().run();
