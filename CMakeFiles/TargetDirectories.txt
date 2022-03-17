@@ -1,3 +1,0 @@
-/run/s6/peril-app-server/CMakeFiles/edit_cache.dir
-/run/s6/peril-app-server/CMakeFiles/rebuild_cache.dir
-/run/s6/peril-app-server/CMakeFiles/peril-app-server.dir
