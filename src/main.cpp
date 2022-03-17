@@ -46,6 +46,7 @@ bool checkSessionValidity() {
         "statusCode:int,
     }
     standard response code should be 200 - if not, then return crow::response(int)
+    all requests sent to the server should at least contain a empty json body, ex {}
 */
 int main() {
 
@@ -60,7 +61,11 @@ int main() {
     });
 
     CROW_ROUTE(app, "/auth/<int>").methods("POST"_method)
-    ([] (int authActionID) {
+    ([] (const crow::request& req, int authActionID) {
+
+        auto requestBody = crow::json::load(req.body);
+
+        if (!requestBody) {return std::string("{debugMsg:\"malformed request (no json body)\",statusCode:400}");}
 
         switch (authActionID) {
 
