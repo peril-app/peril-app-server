@@ -7,3 +7,4 @@ src/cmake_install.cmake
 *.deb.*
 src/peril-app-server
 peril-app-server
+*.db

@@ -6,7 +6,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 find_package(Threads REQUIRED)
 
-link_libraries(-lpthread)
+link_libraries(-lpthread -lsqlite3)
 
 add_compile_definitions(_GLIBCXX_USE_CXX11_ABI=0)
 

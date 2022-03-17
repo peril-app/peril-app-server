@@ -3,6 +3,7 @@
 #include <crow_all.h>
 #include <iostream>
 #include <string>
+#include <sqlite3.h>
 
 using namespace std;
 
@@ -54,6 +55,18 @@ int main() {
 
     app.get_middleware<PerilAppMiddleman>().setMessage("STARTING PERIL APP SERVER");
 
+    sqlite3 *db;
+    int rc = sqlite3_open("peril-app-server-main-db.db", &db);
+
+    if (rc) {
+
+        app.get_middleware<PerilAppMiddleman>().setMessage("COULD NOT OPEN DATABASE. CREATING A NEW ONE.");
+
+    } else {
+
+        app.get_middleware<PerilAppMiddleman>().setMessage("OPENED DATABASE SUCCESSFULLY.");
+    }
+
     CROW_ROUTE(app, "/")
     ([] () {
 
@@ -70,19 +83,22 @@ int main() {
         switch (authActionID) {
 
             case 0 : // wants to create an account
-                return std::string("{debugMsg:\"\",statusCode:503}");
+
+
+
+                return std::string("{debugMsg:\"account created\",statusCode:200}");
                 break;
             
             case 1 : // wants to delete an account
-                return std::string("{debugMsg:\"\",statusCode:503}");
+                return std::string("{debugMsg:\"unfinished route\",statusCode:503}");
                 break;
             
             case 2 : // wants to sign in
-                return std::string("{debugMsg:\"\",statusCode:503}");
+                return std::string("{debugMsg:\"unfinished route\",statusCode:503}");
                 break;
             
             case 3 : // wants to sign out
-                return std::string("{debugMsg:\"\",statusCode:503}");
+                return std::string("{debugMsg:\"unfinished route\",statusCode:503}");
                 break;
             
             case 4 : // wants to check if signed in (only for error handling)
