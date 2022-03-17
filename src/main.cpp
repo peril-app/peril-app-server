@@ -110,7 +110,7 @@ int main() {
         }
     });
 
-    app.loglevel(crow::LogLevel::Debug);
+    app.loglevel(crow::LogLevel::Warning);
 
     app.port(7348).multithreaded().run();
 
