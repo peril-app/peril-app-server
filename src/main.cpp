@@ -69,8 +69,6 @@ bool dbCheck(sqlite3* db) {
     std::vector<std::string> dbQueryResults;
     int rc = sqlite3_exec(db, dbQuery.c_str(), sqlCallback, &dbQueryResults, NULL);
 
-    cout << dbQueryResults.size() << endl;
-
     if (rc != SQLITE_OK) return false;
     else if (1) return false;
     else return true;
@@ -88,7 +86,6 @@ bool dbCheck(sqlite3* db) {
 int main() {
 
     crow::App<PerilAppMiddleman> app;
-    app.get_middleware<PerilAppMiddleman>().setMessage("REQUEST RECIEVED");
 
     // -------------------------------------------- api route -------------------------------------------- //
     CROW_ROUTE(app, "/")
@@ -101,6 +98,9 @@ int main() {
     CROW_ROUTE(app, "/auth/<int>").methods("POST"_method)
     ([] (const crow::request& req, int authActionID) {
 
+        crow::App<PerilAppMiddleman> app;
+        app.get_middleware<PerilAppMiddleman>().setMessage("REQUEST RECIEVED TO /auth/*");
+
         // check authentication stuff first to avoid excess computation wasted on un-authenticated users
         auto requestBody = crow::json::load(req.body);
         if (!requestBody) {return std::string("{debugMsg:'malformed request (no json body)',statusCode:400}");}
@@ -109,8 +109,17 @@ int main() {
         int rc = sqlite3_open("peril-app-server-main-db.db", &db);
         char* dbErrorMsg;
 
-        if (!dbCheck(db)) return std::string("{debugMsg:'internal server error (database error)',statusCode:504}");
-        if (!checkSessionValidity()) return std::string("{debugMsg:'authentication error',statusCode:401}");
+        if (!dbCheck(db)) {
+
+            app.get_middleware<PerilAppMiddleman>().setMessage("REQUEST ENCOUNTERED DATABASE ERROR");
+            return std::string("{debugMsg:'internal server error (database error)',statusCode:504}");
+        }
+
+        if (!checkSessionValidity()) {
+            
+            app.get_middleware<PerilAppMiddleman>().setMessage("REQUEST HAS AUTHENTICATION ERROR");
+            return std::string("{debugMsg:'authentication error',statusCode:401}");
+        }
 
         switch (authActionID) {
 
@@ -141,7 +150,6 @@ int main() {
     });
 
     app.loglevel(crow::LogLevel::Warning);
-
     app.port(7348).multithreaded().run();
 
     return 0;
