@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <sqlite3.h>
+#include <vector>
 
 using namespace std;
 
@@ -38,23 +39,26 @@ bool checkSessionValidity() {
     return false;
 }
 
-static int callback(void* data, int argc, char** argv, char** azColName)
-{
+/*
+    from https://www.geeksforgeeks.org/sql-using-c-c-and-sqlite/
+    basic sql callback
+*/
+std::vector<std::string> callbackStdString(void* data, int argc, char** argv, char** azColName) {
+    
     int i;
     fprintf(stderr, "%s: ", (const char*)data);
   
     for (i = 0; i < argc; i++) {
         printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
     }
-  
-    printf("\n");
+
     return 0;
 }
 
 bool dbCheck(sqlite3* db) {
 
     std::string dbQuery = "SELECT * FROM pas_info";
-    int rc = sqlite3_exec(db, dbQuery.c_str(), callback, NULL, NULL);
+    int rc = sqlite3_exec(db, dbQuery.c_str(), callbackStdString, NULL, NULL);
 
     if (rc != SQLITE_OK) return false;
     else if (1) return false;
@@ -75,12 +79,14 @@ int main() {
     crow::App<PerilAppMiddleman> app;
     app.get_middleware<PerilAppMiddleman>().setMessage("STARTING PERIL APP SERVER");
 
+    // -------------------------------------------- api route -------------------------------------------- //
     CROW_ROUTE(app, "/")
     ([] () {
 
         return "{debugMsg:\"homepage test\"}";
     });
 
+    // -------------------------------------------- api route -------------------------------------------- //
     CROW_ROUTE(app, "/auth/<int>").methods("POST"_method)
     ([] (const crow::request& req, int authActionID) {
 
