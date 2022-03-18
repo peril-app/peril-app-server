@@ -88,7 +88,7 @@ bool dbCheck(sqlite3* db) {
 int main() {
 
     crow::App<PerilAppMiddleman> app;
-    app.get_middleware<PerilAppMiddleman>().setMessage("STARTING PERIL APP SERVER");
+    app.get_middleware<PerilAppMiddleman>().setMessage("REQUEST RECIEVED");
 
     // -------------------------------------------- api route -------------------------------------------- //
     CROW_ROUTE(app, "/")
