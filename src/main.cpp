@@ -15,11 +15,8 @@ using namespace std;
 struct PerilAppMiddleman {
 
     std::string logMsg;
-
     PerilAppMiddleman() {logMsg = '0';}
-
     void setMessage(std::string msg) {logMsg = msg;}
-    
     struct context {};
 
     // before handling the request - usually stuff like logging
@@ -41,6 +38,29 @@ bool checkSessionValidity() {
     return false;
 }
 
+static int callback(void* data, int argc, char** argv, char** azColName)
+{
+    int i;
+    fprintf(stderr, "%s: ", (const char*)data);
+  
+    for (i = 0; i < argc; i++) {
+        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    }
+  
+    printf("\n");
+    return 0;
+}
+
+bool dbCheck(sqlite3* db) {
+
+    std::string dbQuery = "SELECT * FROM pas_info";
+    int rc = sqlite3_exec(db, dbQuery.c_str(), callback, NULL, NULL);
+
+    if (rc != SQLITE_OK) return false;
+    else if (1) return false;
+    else return true;
+}
+
 /* 
     standard route response should be:
     {
@@ -53,20 +73,7 @@ bool checkSessionValidity() {
 int main() {
 
     crow::App<PerilAppMiddleman> app;
-
     app.get_middleware<PerilAppMiddleman>().setMessage("STARTING PERIL APP SERVER");
-
-    sqlite3 *db;
-    int rc = sqlite3_open("peril-app-server-main-db.db", &db);
-
-    if (rc) {
-
-        app.get_middleware<PerilAppMiddleman>().setMessage("COULD NOT OPEN DATABASE. CREATING A NEW ONE.");
-
-    } else {
-
-        app.get_middleware<PerilAppMiddleman>().setMessage("OPENED DATABASE SUCCESSFULLY.");
-    }
 
     CROW_ROUTE(app, "/")
     ([] () {
@@ -77,15 +84,20 @@ int main() {
     CROW_ROUTE(app, "/auth/<int>").methods("POST"_method)
     ([] (const crow::request& req, int authActionID) {
 
+        // check authentication stuff first to avoid excess computation wasted on un-authenticated users
         auto requestBody = crow::json::load(req.body);
+        if (!requestBody) {return std::string("{debugMsg:'malformed request (no json body)',statusCode:400}");}
 
-        if (!requestBody) {return std::string("{debugMsg:\"malformed request (no json body)\",statusCode:400}");}
+        sqlite3 *db;
+        int rc = sqlite3_open("peril-app-server-main-db.db", &db);
+        char* dbErrorMsg;
+
+        if (!dbCheck(db)) return std::string("{debugMsg:'internal server error',statusCode:504}");
+        if (!checkSessionValidity()) return std::string("{debugMsg:'authentication error',statusCode:401}");
 
         switch (authActionID) {
 
             case 0 : // wants to create an account
-
-
 
                 return std::string("{debugMsg:\"account created\",statusCode:200}");
                 break;
@@ -106,7 +118,7 @@ int main() {
                 return std::string("{debugMsg:\"\",auth:" + std::string(checkSessionValidity() ? "true" : "false") + ",statusCode:200}");
                 break;
 
-            default: // wrong action ID
+            default : // wrong action ID
                 return std::string("{debugMsg:\"route does not exist\",statusCode:404}");
         }
     });
