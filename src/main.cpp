@@ -40,25 +40,36 @@ bool checkSessionValidity() {
 }
 
 /*
-    from https://www.geeksforgeeks.org/sql-using-c-c-and-sqlite/
+    adapted from from https://www.geeksforgeeks.org/sql-using-c-c-and-sqlite/
     basic sql callback
 */
-std::vector<std::string> callbackStdString(void* data, int argc, char** argv, char** azColName) {
+static int sqlCallback(void* data, int argc, char** argv, char** azColName) {
     
-    int i;
-    fprintf(stderr, "%s: ", (const char*)data);
-  
-    for (i = 0; i < argc; i++) {
-        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    // [key0, value0, key1, value1, etc...]
+    std::vector<std::string> keyValuePairs;
+
+    for (int i = 0; i < argc; i++) {
+        keyValuePairs.push_back(azColName[i]);
+        keyValuePairs.push_back(argv[i] ? argv[i] : "NULL");
     }
+
+    // pass the pointer of 'databaseKeyValuePairs' back to 'data'
+    data = &keyValuePairs;
 
     return 0;
 }
 
+/*
+    checks that the database is healthy
+    if it is not healthy, it will refuse any connections
+*/
 bool dbCheck(sqlite3* db) {
 
-    std::string dbQuery = "SELECT * FROM pas_info";
-    int rc = sqlite3_exec(db, dbQuery.c_str(), callbackStdString, NULL, NULL);
+    std::string dbQuery = "SELECT * FROM pas_info;";
+    std::vector<std::string> dbQueryResults;
+    int rc = sqlite3_exec(db, dbQuery.c_str(), sqlCallback, &dbQueryResults, NULL);
+
+    cout << dbQueryResults.size() << endl;
 
     if (rc != SQLITE_OK) return false;
     else if (1) return false;
@@ -98,7 +109,7 @@ int main() {
         int rc = sqlite3_open("peril-app-server-main-db.db", &db);
         char* dbErrorMsg;
 
-        if (!dbCheck(db)) return std::string("{debugMsg:'internal server error',statusCode:504}");
+        if (!dbCheck(db)) return std::string("{debugMsg:'internal server error (database error)',statusCode:504}");
         if (!checkSessionValidity()) return std::string("{debugMsg:'authentication error',statusCode:401}");
 
         switch (authActionID) {
